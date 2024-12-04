@@ -14,7 +14,7 @@ sidebar_position: 1
 ## Архитектура
 - **Тип**: Монолитная архитектура.
 - **Технологии**:
-  - **Backend**: C#/ASP.NET/.NET CORE.
+  - **Backend**: C#/ASP.NET/.NET CORE/PostgreSQL.
   - **Frontend**: AngularJS.
  ---
 ## Основные функциональные возможности
