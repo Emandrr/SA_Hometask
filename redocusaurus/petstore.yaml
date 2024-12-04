@@ -1,0 +1,145 @@
+openapi: 3.0.3
+info:
+  title: Diagnosis Management API
+  version: 1.0.0
+  description: API для управления диагнозами, взаимодействия врача и пациента.
+servers:
+  - url: http://localhost:8080
+    description: Локальный сервер
+paths:
+  /patients:
+    get:
+      summary: Получить список пациентов
+      description: Возвращает список пациентов с краткой информацией.
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient'
+  /patients/{id}/diagnoses:
+    get:
+      summary: Получить диагнозы пациента
+      description: Возвращает список диагнозов выбранного пациента.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID пациента
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Diagnosis'
+    post:
+      summary: Добавить новый диагноз
+      description: Создает новый диагноз для пациента.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID пациента
+          schema:
+            type: string
+      requestBody:
+        description: Данные нового диагноза
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewDiagnosis'
+      responses:
+        '201':
+          description: Диагноз успешно добавлен
+    put:
+      summary: Редактировать диагноз
+      description: Обновляет существующий диагноз пациента.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID пациента
+          schema:
+            type: string
+      requestBody:
+        description: Обновленные данные диагноза
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Diagnosis'
+      responses:
+        '200':
+          description: Диагноз успешно обновлен
+components:
+  schemas:
+    Patient:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор пациента
+        fullName:
+          type: string
+          description: Полное имя пациента
+        birthDate:
+          type: string
+          format: date
+          description: Дата рождения пациента
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - other
+          description: Пол пациента
+    Diagnosis:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Уникальный идентификатор диагноза
+        title:
+          type: string
+          description: Название диагноза
+        description:
+          type: string
+          description: Подробное описание диагноза
+        doctor:
+          type: object
+          properties:
+            id:
+              type: string
+              description: Уникальный идентификатор врача
+            fullName:
+              type: string
+              description: Имя врача
+        dateIssued:
+          type: string
+          format: date
+          description: Дата выставления диагноза
+    NewDiagnosis:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название диагноза
+        description:
+          type: string
+          description: Подробное описание диагноза
+        dateIssued:
+          type: string
+          format: date
+          description: Дата выставления диагноза
+        doctorId:
+          type: string
+          description: ID врача, выставившего диагноз
